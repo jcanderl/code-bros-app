@@ -1,0 +1,23 @@
+{
+  "name": "code-bros-app",
+  "version": "1.0.0",
+  "description": "Simple starter app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jcanderl/code-bros-app.git"
+  },
+  "author": "JC Anderl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcanderl/code-bros-app.git"
+  },
+  "homepage": "https://github.com/jcanderl/code-bros-app.git",
+  "dependencies": {
+    "ejs": "^2.3.4",
+    "express": "^4.13.3"
+  }
+}
