@@ -18,6 +18,7 @@
   "homepage": "https://github.com/jcanderl/code-bros-app.git",
   "dependencies": {
     "ejs": "^2.3.4",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "pg": "^4.4.3"
   }
 }
