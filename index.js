@@ -56,6 +56,51 @@ app.post('/signups', function(req, res) {
   });
 });
 
+/* DELETE SIGNUP BY ID IN ROUTE */
+app.delete('/signups/:id', function(req, res) {
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    var sql = "DELETE FROM signups WHERE id = $1 RETURNING id";
+    var data = [
+      req.params.id,
+      ];
+    client.query(sql, data, function(err, result) {
+      done();
+      if (err) {
+       console.error(err);
+        res.statusCode = 500;
+        return res.json({
+          errors: ['Could not delete signup']
+      }); }
+      else {
+        res.statusCode = 200;
+        res.json(result.rows[0]);
+      }
+    });
+  });  
+});
+
+/* DELETE SIGNUP BY ID IN JSON */
+app.delete('/signups', function(req, res) {
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    var sql = "DELETE FROM signups WHERE id = $1 RETURNING id";
+    var data = [
+      req.body.id,
+      ];
+    client.query(sql, data, function(err, result) {
+      done();
+      if (err) {
+       console.error(err);
+        res.statusCode = 500;
+        return res.json({
+          errors: ['Could not delete signup']
+      }); }
+      else {
+        res.statusCode = 200;
+        res.json(result.rows[0]);
+      }
+    });
+  });  
+});
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
