@@ -2,8 +2,12 @@ var express = require('express');
 var app = express();
 var pg = require('pg');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 
 app.use(bodyParser.json({ type: 'application/json' }));
+
+// We add the middleware after we load the body parser
+app.use(expressValidator());
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -16,6 +20,26 @@ app.set('view engine', 'ejs');
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
+
+/* MIDDLEWARE FUNCTIONS */
+
+function validateSignup(req, res, next) {
+  req.checkBody('id', 'Invalid id').isNumeric();
+  req.checkBody('name', 'Invalid name').notEmpty();
+ // req.checkBody('email', 'Invalid email').notEmpty();
+  var errors = req.validationErrors();
+  if (errors) {
+    var response = { errors: [] };
+    errors.forEach(function(err) {
+      response.errors.push(err.msg);
+    });
+    res.statusCode = 400;
+    return res.json(response);
+  }
+  return next();
+ }
+
+
 
 app.get('/signups', function(req, res) {
 var sql = 'SELECT * FROM signups'; 
@@ -32,7 +56,7 @@ var sql = 'SELECT * FROM signups';
   });
 });
 
-app.post('/signups', function(req, res) {
+app.post('/signups', validateSignup, function(req, res) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     var sql = "INSERT INTO signups (id, name, email) values ($1, $2, $3) RETURNING id"; 
     var data = [
